@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Table Operations - Supabase POC interactive database tools.">
-  <title>✨ Supabase Table Operations POC</title>
+  <meta name="description" content="Realtime POC - Live Database synchronization demo.">
+  <title>✨ Supabase Realtime Sync POC</title>
   
   <!-- Modern Typography (Inter & Outfit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
       --bg-card: rgba(22, 28, 45, 0.7);
       --bg-glass: rgba(15, 23, 42, 0.6);
       --border-color: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(6, 182, 212, 0.2);
+      --border-glow: rgba(139, 92, 246, 0.2);
       
       --text-primary: #f8fafc;
       --text-muted: #94a3b8;
@@ -49,8 +49,8 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
       color: var(--text-primary);
       font-family: var(--font-body);
       min-height: 100vh;
@@ -87,7 +87,7 @@
       font-family: var(--font-display);
       font-size: 1.4rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+      background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: flex;
@@ -120,7 +120,7 @@
       left: 0;
       width: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+      background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
       transition: var(--transition);
     }
 
@@ -170,7 +170,7 @@
     /* Layout Grid */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.2fr;
       gap: 2.5rem;
       align-items: start;
     }
@@ -193,7 +193,7 @@
 
     .glass-card:hover {
       border-color: var(--border-glow);
-      box-shadow: 0 15px 35px -5px rgba(6, 182, 212, 0.1);
+      box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.1);
     }
 
     .card-title {
@@ -206,129 +206,143 @@
       gap: 0.75rem;
     }
 
-    /* Controls Panel */
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.25rem;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
+    /* Status Indicator Badge */
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--text-muted);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, var(--accent-red), #b91c1c);
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* Stats Section */
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-box {
-      background: rgba(15, 23, 42, 0.5);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .stat-val {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
-    }
-
-    .stat-lbl {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Logger Terminal */
-    .terminal-container {
-      background: #050811;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .terminal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .terminal-body {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.9rem;
-      color: #38bdf8;
-      max-height: 250px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    .log-line {
-      margin-bottom: 0.35rem;
-    }
-
-    .log-time {
-      color: var(--text-muted);
-    }
-
-    .log-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 9999px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.85rem;
       color: var(--accent-green);
+      font-weight: 600;
     }
 
-    .log-error {
+    .status-badge.disconnected {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
       color: var(--accent-red);
     }
 
-    /* List styling */
-    .task-item {
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      position: relative;
+    }
+
+    .status-badge.disconnected .status-dot {
+      background: var(--accent-red);
+    }
+
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: inherit;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+
+    /* Event log feed */
+    .feed-container {
+      background: #050811;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .feed-title {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .feed-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .feed-item {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--text-muted);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .feed-item.INSERT {
+      border-left-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.03);
+    }
+
+    .feed-item.UPDATE {
+      border-left-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.03);
+    }
+
+    .feed-item.DELETE {
+      border-left-color: var(--accent-red);
+      background: rgba(239, 68, 68, 0.03);
+    }
+
+    .feed-timestamp {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Live list indicators */
+    .live-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .live-task-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -336,44 +350,28 @@
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 0.75rem 1rem;
-      margin-bottom: 0.75rem;
       transition: var(--transition);
     }
 
-    .task-item:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-      background: rgba(22, 28, 45, 0.6);
+    .live-task-item.completed {
+      border-color: rgba(16, 185, 129, 0.2);
     }
 
-    .task-title {
+    .live-task-title {
       font-size: 0.95rem;
     }
 
-    .task-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.15rem 0.5rem;
-      border-radius: 9999px;
+    .live-task-item.completed .live-task-title {
+      color: var(--text-muted);
+      text-decoration: line-through;
     }
 
-    .badge-completed {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .badge-pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    /* Debug Side Menu (Consistent with Boilerplate Layout) */
+    /* Debug Toggle Button and Sidebar Overlay */
     .debug-toggle-btn {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+      background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
       border: none;
       border-radius: 50%;
       width: 3.5rem;
@@ -384,7 +382,7 @@
       color: white;
       font-size: 1.25rem;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
       z-index: 1000;
       transition: var(--transition);
     }
@@ -517,73 +515,51 @@
   </header>
 
   <div class="container">
-    <h1 class="page-title">Supabase Table Operations</h1>
-    <p class="page-subtitle">Admin dashboard to Seed, Wipe, and Inspect tasks table values directly using standard REST interfaces.</p>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+      <div>
+        <h1 class="page-title">Realtime Synchronization</h1>
+        <p class="page-subtitle">Demonstrating PostgreSQL replication events push to client via WebSockets in real-time.</p>
+      </div>
+      <div class="status-badge" id="statusBadge">
+        <div class="status-dot"></div>
+        <span id="statusText">Connecting WebSocket...</span>
+      </div>
+    </div>
     
     <div class="grid">
-      <!-- Left Column: Operations and Logs -->
-      <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <section class="glass-card">
-          <h2 class="card-title">
-            <i class="fa-solid fa-wrench" style="color: var(--accent-cyan);"></i>
-            <span>Database Tools</span>
-          </h2>
-          
-          <div class="stats-container">
-            <div class="stat-box">
-              <div class="stat-val" id="totalCount">0</div>
-              <div class="stat-lbl">Total</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" style="color: var(--accent-green);" id="completedCount">0</div>
-              <div class="stat-lbl">Completed</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" style="color: #f59e0b;" id="activeCount">0</div>
-              <div class="stat-lbl">Active</div>
-            </div>
+      <!-- Left Column: Live Event Logs Feed -->
+      <section class="glass-card" style="padding: 2rem;">
+        <h2 class="card-title">
+          <i class="fa-solid fa-satellite-dish" style="color: var(--accent-violet);"></i>
+          <span>Live WebSocket Feed</span>
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          Open this page in a second browser window, modify/add/delete tasks from the Home page or Table Ops, and watch the events propagate instantly.
+        </p>
+        
+        <div class="feed-container">
+          <div class="feed-title">
+            <span>WebSocket Event Stream</span>
+            <span onclick="clearFeed()" style="cursor: pointer; font-size: 0.8rem; text-transform: none;"><i class="fa-regular fa-trash-can"></i> Clear Stream</span>
           </div>
-
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            Run bulk data seeding or truncate operations. Helpful for testing synchronization limits and network response behaviors.
-          </p>
-
-          <div class="btn-group">
-            <button class="btn btn-primary" onclick="seedDatabase()">
-              <i class="fa-solid fa-database"></i> Seed Mock Data
-            </button>
-            <button class="btn btn-danger" onclick="wipeDatabase()">
-              <i class="fa-solid fa-trash-can"></i> Wipe All Tasks
-            </button>
-          </div>
-        </section>
-
-        <!-- Logger Console -->
-        <section class="terminal-container">
-          <div class="terminal-header">
-            <span>QUERY LOG CONSOLE</span>
-            <span onclick="clearLogs()" style="cursor: pointer;"><i class="fa-regular fa-trash-can"></i> Clear</span>
-          </div>
-          <div class="terminal-body" id="logConsole">
-            <div class="log-line"><span class="log-time">[System]</span> Initialized operations dashboard. Ready for connection.</div>
-          </div>
-        </section>
-      </div>
-
-      <!-- Right Column: Live Data Grid -->
-      <section class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h2 class="card-title" style="margin-bottom: 0;">
-            <i class="fa-solid fa-rectangle-list" style="color: var(--accent-violet);"></i>
-            <span>Database View</span>
-          </h2>
-          <button class="btn btn-secondary" onclick="fetchTableData()" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
-            <i class="fa-solid fa-rotate"></i> Refresh
-          </button>
+          <ul class="feed-list" id="feedList">
+            <li class="feed-item">Listening for tasks database changes...</li>
+          </ul>
         </div>
+      </section>
 
-        <div style="max-height: 500px; overflow-y: auto;" id="tableContainer">
-          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading database index...</div>
+      <!-- Right Column: Database State View -->
+      <section class="glass-card" style="padding: 2rem;">
+        <h2 class="card-title">
+          <i class="fa-solid fa-database" style="color: var(--accent-cyan);"></i>
+          <span>Live Local Sync Grid</span>
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+          This local list updates automatically on events without triggering manual REST refresh polls.
+        </p>
+
+        <div class="live-list-container" id="liveListContainer">
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Fetching table content...</div>
         </div>
       </section>
     </div>
@@ -625,8 +601,6 @@
       projectMenu: [
         { label: "Home", url: "index.html" },
         { label: "Table Ops", url: "5_Symbols/table_operations.html" },
-        { label: "Realtime Sync", url: "5_Symbols/realtime_poc.html" },
-        { label: "Storage", url: "5_Symbols/storage_poc.html" },
         { label: "Docs", url: "markdown_renderer.html?file=2_Environment/README.md" },
         { label: "API", url: "markdown_renderer.html?file=4_Formula/README.md" }
       ],
@@ -639,9 +613,7 @@
         { label: "3. Simulation", url: "3_Simulation/" },
         { label: "4. Formula", url: "4_Formula/" },
         { label: "5. Symbols", url: "5_Symbols/" },
-        { label: "   ├─ Table Operations", url: "5_Symbols/table_operations.html" },
-        { label: "   ├─ Realtime Sync POC", url: "5_Symbols/realtime_poc.html" },
-        { label: "   ├─ Storage Bucket POC", url: "5_Symbols/storage_poc.html" },
+        { label: "   ├─ Table Operations", "url": "5_Symbols/table_operations.html" },
         { label: "6. Semblance", url: "6_Semblance/" },
         { label: "7. Testing Known", url: "7_Testing_Known/" },
         { label: "---", url: "divider" },
@@ -654,7 +626,7 @@
       ]
     };
 
-    // 🍪 Helper Functions for Cookie Management
+    // Cookies helper
     function setCookie(name, value, days = 7) {
       const d = new Date();
       d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -668,42 +640,17 @@
       return null;
     }
 
-    function debugLog(message, data = '') {
-      if (getCookie("debug") === "true") {
-        console.log(`%c[Debug Mode] ${message}`, 'color: #06b6d4; font-weight: bold;', data);
-      }
-    }
-
     // Supabase Credentials
     const SUPABASE_URL = "https://vlhzvprprqiljuaresnb.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsaHp2cHJwcnFpbGp1YXJlc25iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTA0NTMsImV4cCI6MjA5NjE2NjQ1M30.U_6THQpd2BWNJeQElsg2kKULAL72wcemxQ41paUM1d8";
     
     let supabaseClient;
+    let localTasks = [];
+
     try {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      addConsoleLog("Successfully connected to Supabase client SDK.", "success");
     } catch(err) {
-      addConsoleLog("Failed to initialize Supabase client: " + err.message, "error");
-    }
-
-    // Logger Console
-    function addConsoleLog(text, type = "info") {
-      const consoleEl = document.getElementById("logConsole");
-      const time = new Date().toLocaleTimeString();
-      const line = document.createElement("div");
-      line.className = "log-line";
-      
-      let classType = "";
-      if (type === "success") classType = "class='log-success'";
-      if (type === "error") classType = "class='log-error'";
-
-      line.innerHTML = `<span class="log-time">[${time}]</span> <span ${classType}>${text}</span>`;
-      consoleEl.appendChild(line);
-      consoleEl.scrollTop = consoleEl.scrollHeight;
-    }
-
-    function clearLogs() {
-      document.getElementById("logConsole").innerHTML = "";
+      console.error("Client init fail:", err);
     }
 
     // Dynamic Navigation Config Loading
@@ -732,7 +679,6 @@
           const link = document.createElement("a");
           
           let finalUrl = item.url;
-          // Format paths relative to this subdirectory
           if (finalUrl !== "index.html" && !finalUrl.startsWith("http") && !finalUrl.includes("markdown_renderer.html")) {
             if (finalUrl.startsWith("5_Symbols/")) {
               finalUrl = finalUrl.replace("5_Symbols/", "");
@@ -746,7 +692,7 @@
           }
           
           link.href = finalUrl;
-          link.className = `menu-link ${item.label === 'Table Ops' ? 'active' : ''}`;
+          link.className = `menu-link ${item.label === 'Realtime Sync' ? 'active' : ''}`;
           link.textContent = item.label;
           projectMenuContainer.appendChild(link);
         });
@@ -810,14 +756,20 @@
         setCookie("debug", "false");
       });
 
-      fetchTableData();
+      // Start fetching and subscribe
+      startPoc();
     });
 
-    // Database Actions
-    async function fetchTableData() {
-      if (!supabaseClient) return;
-      addConsoleLog("Fetching current table content from standard REST API...");
-      
+    async function startPoc() {
+      // 1. Fetch initial database state
+      await loadInitialState();
+
+      // 2. Subscribe to Realtime Postgres Changes
+      subscribeRealtime();
+    }
+
+    async function loadInitialState() {
+      const liveListContainer = document.getElementById("liveListContainer");
       try {
         const { data, error } = await supabaseClient
           .from('tasks')
@@ -826,95 +778,118 @@
 
         if (error) throw error;
 
-        const tableContainer = document.getElementById("tableContainer");
-        tableContainer.innerHTML = "";
-        
-        let completed = 0;
-        let active = 0;
-
-        if (data.length === 0) {
-          tableContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Database table tasks is currently empty.</div>`;
-          addConsoleLog("Fetch complete. 0 tasks retrieved.", "success");
-        } else {
-          data.forEach(task => {
-            if (task.completed) completed++;
-            else active++;
-
-            const div = document.createElement("div");
-            div.className = "task-item";
-            div.innerHTML = `
-              <div class="task-title">${task.id}: ${task.title}</div>
-              <div class="task-badge ${task.completed ? 'badge-completed' : 'badge-pending'}">
-                ${task.completed ? 'Completed' : 'Pending'}
-              </div>
-            `;
-            tableContainer.appendChild(div);
-          });
-          addConsoleLog(`Fetch complete. Retrieved ${data.length} tasks successfully.`, "success");
-        }
-
-        document.getElementById("totalCount").textContent = data.length;
-        document.getElementById("completedCount").textContent = completed;
-        document.getElementById("activeCount").textContent = active;
-
-      } catch(err) {
-        addConsoleLog("Error fetching data: " + err.message, "error");
+        localTasks = data;
+        renderTasks();
+      } catch (err) {
+        liveListContainer.innerHTML = `<div style="color: var(--accent-red);">Error loading tasks: ${err.message}</div>`;
       }
     }
 
-    async function seedDatabase() {
-      if (!supabaseClient) return;
-      addConsoleLog("Initiating bulk seeding operation...");
-      
-      const mockTasks = [
-        { title: "Define Proof of Concept goals", completed: true },
-        { title: "Configure local system credentials", completed: true },
-        { title: "Run SQL migrations on Supabase", completed: true },
-        { title: "Test CRUD latency with REST pooler", completed: false },
-        { title: "Document Semblance error learnings", completed: false }
-      ];
+    function renderTasks() {
+      const liveListContainer = document.getElementById("liveListContainer");
+      liveListContainer.innerHTML = "";
 
-      try {
-        const { data, error } = await supabaseClient
-          .from('tasks')
-          .insert(mockTasks)
-          .select();
-
-        if (error) throw error;
-        addConsoleLog(`Seeding successful! Inserted ${data.length} mock rows.`, "success");
-        fetchTableData();
-      } catch(err) {
-        addConsoleLog("Seeding failed: " + err.message, "error");
+      if (localTasks.length === 0) {
+        liveListContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Database is empty. Add a task to see realtime updates.</div>`;
+        return;
       }
+
+      localTasks.forEach(task => {
+        const div = document.createElement("div");
+        div.className = `live-task-item ${task.completed ? 'completed' : ''}`;
+        div.innerHTML = `
+          <div class="live-task-title">${task.id}: ${escapeHTML(task.title)}</div>
+          <span style="font-size: 0.8rem; color: ${task.completed ? 'var(--accent-green)' : '#f59e0b'}; font-weight: 500;">
+            ${task.completed ? 'Completed' : 'Pending'}
+          </span>
+        `;
+        liveListContainer.appendChild(div);
+      });
     }
 
-    async function wipeDatabase() {
-      if (!supabaseClient) return;
-      if (!confirm("Are you sure you want to delete all entries in the tasks table?")) return;
+    function subscribeRealtime() {
+      const statusBadge = document.getElementById("statusBadge");
+      const statusText = document.getElementById("statusText");
+
+      const channel = supabaseClient
+        .channel('tasks-live-feed')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'tasks' },
+          (payload) => {
+            handleRealtimeEvent(payload);
+          }
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            statusBadge.className = "status-badge";
+            statusText.textContent = "Live WebSockets Connected";
+            appendFeed("System", "SUBSCRIBED", "Channel tasks-live-feed connected.");
+          } else {
+            statusBadge.className = "status-badge disconnected";
+            statusText.textContent = "WebSocket Offline";
+          }
+        });
+    }
+
+    function handleRealtimeEvent(payload) {
+      const eventType = payload.eventType;
+      let logMsg = "";
       
-      addConsoleLog("Initiating truncate/deletion operations on tasks table...");
-      try {
-        // Fetch all rows to delete them since client API eq needs qualification
-        const { data: tasks, error: fetchErr } = await supabaseClient.from('tasks').select('id');
-        if (fetchErr) throw fetchErr;
-
-        if (tasks.length === 0) {
-          addConsoleLog("Table is already empty. No action taken.", "info");
-          return;
+      if (eventType === "INSERT") {
+        localTasks.push(payload.new);
+        localTasks.sort((a, b) => a.id - b.id);
+        logMsg = `New Task ID ${payload.new.id}: "${payload.new.title}"`;
+      } else if (eventType === "UPDATE") {
+        const index = localTasks.findIndex(t => t.id === payload.new.id);
+        if (index !== -1) {
+          localTasks[index] = payload.new;
         }
-
-        const ids = tasks.map(t => t.id);
-        const { error } = await supabaseClient
-          .from('tasks')
-          .delete()
-          .in('id', ids);
-
-        if (error) throw error;
-        addConsoleLog(`Successfully deleted ${ids.length} rows from database.`, "success");
-        fetchTableData();
-      } catch(err) {
-        addConsoleLog("Wiping operation failed: " + err.message, "error");
+        logMsg = `Task ID ${payload.new.id} updated: Completed = ${payload.new.completed}`;
+      } else if (eventType === "DELETE") {
+        const index = localTasks.findIndex(t => t.id === payload.old.id);
+        if (index !== -1) {
+          localTasks.splice(index, 1);
+        }
+        logMsg = `Task ID ${payload.old.id} deleted.`;
       }
+
+      appendFeed(eventType, eventType, logMsg);
+      renderTasks();
+    }
+
+    function appendFeed(header, type, text) {
+      const feedList = document.getElementById("feedList");
+      const time = new Date().toLocaleTimeString();
+      const li = document.createElement("li");
+      li.className = `feed-item ${type}`;
+      li.innerHTML = `
+        <div class="feed-timestamp">[${time}] Event: ${header}</div>
+        <div>${escapeHTML(text)}</div>
+      `;
+      
+      // Remove loading placeholder
+      if (feedList.children.length === 1 && feedList.children[0].textContent.includes("Listening")) {
+        feedList.innerHTML = "";
+      }
+
+      feedList.prepend(li);
+    }
+
+    function clearFeed() {
+      document.getElementById("feedList").innerHTML = '<li class="feed-item">Listening for tasks database changes...</li>';
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
     }
   </script>
 </body>

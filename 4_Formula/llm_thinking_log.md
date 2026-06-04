@@ -376,3 +376,26 @@ This log documents the thinking phase summaries and reasoning processes of the L
 - Created `5_Symbols/table_operations.html`.
 - Updated navigation configurations and fallback variables.
 - Verified live seeder and truncater client capabilities.
+
+---
+
+## 📅 2026-06-04 — Realtime and Storage POC Integration
+
+### 📥 Input / Task
+- Create Realtime WebSocket replication POC page (`realtime_poc.html`).
+- Create Storage object uploads and listing POC page (`storage_poc.html`).
+- Configure a storage bucket in Supabase via SQL backend migration.
+- Add both pages to the project navigation configuration and fallbacks.
+- Commit and push changes.
+
+### 💭 Thinking & Reasoning Process
+1. **Database Storage Configuration**: Wrote a Python setup script `setup_storage.py` and executed SQL commands to dynamically configure a public storage bucket named `poc-files` on the Supabase PostgreSQL backend, applying full select/insert/delete public security policies on `storage.objects`.
+2. **Realtime POC Implementation**: Created `5_Symbols/realtime_poc.html` which utilizes Supabase client's `.channel().on('postgres_changes')` method to connect to WebSocket channels and stream replication INSERT, UPDATE, and DELETE events live. Designed a live WebSocket feed component and auto-syncing local view list.
+3. **Storage POC Implementation**: Created `5_Symbols/storage_poc.html` to enable file object uploads, fetch public URLs via `.storage.from().getPublicUrl()`, list folder objects, display image previews, and perform object removals.
+4. **Navigation Integration**: Synced `navigation_config.json` and fallback JS structures in `index.html`, `markdown_renderer.html`, and `table_operations.html` to include the two new items in Project and Debug menus.
+
+### 📤 Outcomes & Decisions
+- Created `5_Symbols/realtime_poc.html` (WebSocket Sync POC).
+- Created `5_Symbols/storage_poc.html` (Bucket Storage POC).
+- Dynamically created public bucket `poc-files` on remote Supabase instance.
+- Fully updated menu configurations across the repository.

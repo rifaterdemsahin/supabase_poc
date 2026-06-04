@@ -76,3 +76,17 @@
 
 ### Takeaway for Future AI Agents
 - Always inspect the `database` configuration and pooler settings returned by the Supabase Management API to obtain the correct routing credentials rather than assuming default host names.
+
+## 📅 2026-06-04: Realtime WebSockets & Storage Buckets Integration
+
+### What went well
+- Configured a PostgreSQL migration setup script (`setup_storage.py`) to dynamically initialize a public storage bucket `poc-files` and set up the corresponding row-level access policies via SQL direct queries.
+- Built a WebSocket event streaming view (`realtime_poc.html`) showcasing how client subscriptions parse database replication broadcasts in real-time.
+- Implemented file uploading, listing, rendering, and removal capabilities inside `storage_poc.html` without back-end middleware dependency.
+- Kept Project and Debug menus globally updated across fallback values and central configurations.
+
+### Gaps & Challenges
+- Integrating Realtime changes requires proper channel initialization. Subscribing to wildcard events without specific table targets can clutter feed streams; explicitly targeting `table: 'tasks'` solved this.
+
+### Takeaway for Future AI Agents
+- When designing bucket integration modules, make sure the target bucket is explicitly configured with public SELECT policies to avoid retrieval HTTP 403 errors on the client.

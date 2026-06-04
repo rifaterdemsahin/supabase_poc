@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Table Operations - Supabase POC interactive database tools.">
-  <title>✨ Supabase Table Operations POC</title>
+  <meta name="description" content="Storage POC - Live File Uploads and Storage buckets interface.">
+  <title>✨ Supabase Storage Bucket POC</title>
   
   <!-- Modern Typography (Inter & Outfit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -170,7 +170,7 @@
     /* Layout Grid */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.3fr;
       gap: 2.5rem;
       align-items: start;
     }
@@ -206,83 +206,112 @@
       gap: 0.75rem;
     }
 
-    /* Controls Panel */
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1.25rem;
-      color: white;
-      font-weight: 600;
+    /* Upload Area */
+    .upload-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
       cursor: pointer;
       transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--text-muted);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, var(--accent-red), #b91c1c);
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* Stats Section */
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
       margin-bottom: 1.5rem;
     }
 
-    .stat-box {
-      background: rgba(15, 23, 42, 0.5);
+    .upload-zone:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.02);
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      color: var(--accent-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    /* File List Grid */
+    .file-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .file-card {
+      background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 1rem;
       text-align: center;
+      transition: var(--transition);
+      position: relative;
     }
 
-    .stat-val {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--accent-cyan);
+    .file-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
     }
 
-    .stat-lbl {
-      font-size: 0.8rem;
+    .file-preview {
+      width: 100%;
+      height: 100px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+
+    .file-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .file-preview i {
+      font-size: 2rem;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    /* Logger Terminal */
+    .file-name {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-delete-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: var(--accent-red);
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .file-delete-btn:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    /* Terminal Console */
     .terminal-container {
       background: #050811;
       border: 1px solid var(--border-color);
@@ -304,19 +333,15 @@
 
     .terminal-body {
       font-family: 'Courier New', Courier, monospace;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #38bdf8;
-      max-height: 250px;
+      max-height: 200px;
       overflow-y: auto;
       white-space: pre-wrap;
     }
 
     .log-line {
       margin-bottom: 0.35rem;
-    }
-
-    .log-time {
-      color: var(--text-muted);
     }
 
     .log-success {
@@ -327,48 +352,7 @@
       color: var(--accent-red);
     }
 
-    /* List styling */
-    .task-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(22, 28, 45, 0.4);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.75rem;
-      transition: var(--transition);
-    }
-
-    .task-item:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-      background: rgba(22, 28, 45, 0.6);
-    }
-
-    .task-title {
-      font-size: 0.95rem;
-    }
-
-    .task-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.15rem 0.5rem;
-      border-radius: 9999px;
-    }
-
-    .badge-completed {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .badge-pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    /* Debug Side Menu (Consistent with Boilerplate Layout) */
+    /* Debug overlay */
     .debug-toggle-btn {
       position: fixed;
       bottom: 2rem;
@@ -517,73 +501,56 @@
   </header>
 
   <div class="container">
-    <h1 class="page-title">Supabase Table Operations</h1>
-    <p class="page-subtitle">Admin dashboard to Seed, Wipe, and Inspect tasks table values directly using standard REST interfaces.</p>
+    <h1 class="page-title">Supabase Storage Bucket</h1>
+    <p class="page-subtitle">Demonstrating static file object uploads, public URLs retrieval, and asset listings on public storage buckets.</p>
     
     <div class="grid">
-      <!-- Left Column: Operations and Logs -->
+      <!-- Left Column: Upload and Diagnostics -->
       <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <section class="glass-card">
+        <section class="glass-card" style="padding: 2rem;">
           <h2 class="card-title">
-            <i class="fa-solid fa-wrench" style="color: var(--accent-cyan);"></i>
-            <span>Database Tools</span>
+            <i class="fa-solid fa-cloud-arrow-up" style="color: var(--accent-cyan);"></i>
+            <span>Upload Object</span>
           </h2>
           
-          <div class="stats-container">
-            <div class="stat-box">
-              <div class="stat-val" id="totalCount">0</div>
-              <div class="stat-lbl">Total</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" style="color: var(--accent-green);" id="completedCount">0</div>
-              <div class="stat-lbl">Completed</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" style="color: #f59e0b;" id="activeCount">0</div>
-              <div class="stat-lbl">Active</div>
-            </div>
+          <div class="upload-zone" onclick="triggerFileInput()">
+            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+            <p style="font-weight: 500;">Click to select file to upload</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Images or general assets up to 5MB</p>
+            <input type="file" id="fileInput" class="file-input" onchange="uploadSelectedFile(event)">
           </div>
 
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            Run bulk data seeding or truncate operations. Helpful for testing synchronization limits and network response behaviors.
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Uploaded files are placed inside the public bucket <code style="color: var(--accent-cyan);">poc-files</code> on Supabase servers.
           </p>
-
-          <div class="btn-group">
-            <button class="btn btn-primary" onclick="seedDatabase()">
-              <i class="fa-solid fa-database"></i> Seed Mock Data
-            </button>
-            <button class="btn btn-danger" onclick="wipeDatabase()">
-              <i class="fa-solid fa-trash-can"></i> Wipe All Tasks
-            </button>
-          </div>
         </section>
 
         <!-- Logger Console -->
         <section class="terminal-container">
           <div class="terminal-header">
-            <span>QUERY LOG CONSOLE</span>
+            <span>STORAGE OPERATIONS LOG</span>
             <span onclick="clearLogs()" style="cursor: pointer;"><i class="fa-regular fa-trash-can"></i> Clear</span>
           </div>
           <div class="terminal-body" id="logConsole">
-            <div class="log-line"><span class="log-time">[System]</span> Initialized operations dashboard. Ready for connection.</div>
+            <div class="log-line"><span style="color: var(--text-muted);">[System]</span> Storage manager initialized. Ready.</div>
           </div>
         </section>
       </div>
 
-      <!-- Right Column: Live Data Grid -->
-      <section class="glass-card">
+      <!-- Right Column: Object List Grid -->
+      <section class="glass-card" style="padding: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
           <h2 class="card-title" style="margin-bottom: 0;">
-            <i class="fa-solid fa-rectangle-list" style="color: var(--accent-violet);"></i>
-            <span>Database View</span>
+            <i class="fa-solid fa-folder-open" style="color: var(--accent-violet);"></i>
+            <span>Files In Bucket</span>
           </h2>
-          <button class="btn btn-secondary" onclick="fetchTableData()" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+          <button class="btn btn-secondary" onclick="fetchFilesList()" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
             <i class="fa-solid fa-rotate"></i> Refresh
           </button>
         </div>
 
-        <div style="max-height: 500px; overflow-y: auto;" id="tableContainer">
-          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading database index...</div>
+        <div class="file-list" id="fileListContainer">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">Fetching folder objects...</div>
         </div>
       </section>
     </div>
@@ -625,8 +592,6 @@
       projectMenu: [
         { label: "Home", url: "index.html" },
         { label: "Table Ops", url: "5_Symbols/table_operations.html" },
-        { label: "Realtime Sync", url: "5_Symbols/realtime_poc.html" },
-        { label: "Storage", url: "5_Symbols/storage_poc.html" },
         { label: "Docs", url: "markdown_renderer.html?file=2_Environment/README.md" },
         { label: "API", url: "markdown_renderer.html?file=4_Formula/README.md" }
       ],
@@ -639,9 +604,7 @@
         { label: "3. Simulation", url: "3_Simulation/" },
         { label: "4. Formula", url: "4_Formula/" },
         { label: "5. Symbols", url: "5_Symbols/" },
-        { label: "   ├─ Table Operations", url: "5_Symbols/table_operations.html" },
-        { label: "   ├─ Realtime Sync POC", url: "5_Symbols/realtime_poc.html" },
-        { label: "   ├─ Storage Bucket POC", url: "5_Symbols/storage_poc.html" },
+        { label: "   ├─ Table Operations", "url": "5_Symbols/table_operations.html" },
         { label: "6. Semblance", url: "6_Semblance/" },
         { label: "7. Testing Known", url: "7_Testing_Known/" },
         { label: "---", url: "divider" },
@@ -654,7 +617,7 @@
       ]
     };
 
-    // 🍪 Helper Functions for Cookie Management
+    // Cookies helper
     function setCookie(name, value, days = 7) {
       const d = new Date();
       d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -668,22 +631,18 @@
       return null;
     }
 
-    function debugLog(message, data = '') {
-      if (getCookie("debug") === "true") {
-        console.log(`%c[Debug Mode] ${message}`, 'color: #06b6d4; font-weight: bold;', data);
-      }
-    }
-
     // Supabase Credentials
     const SUPABASE_URL = "https://vlhzvprprqiljuaresnb.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsaHp2cHJwcnFpbGp1YXJlc25iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTA0NTMsImV4cCI6MjA5NjE2NjQ1M30.U_6THQpd2BWNJeQElsg2kKULAL72wcemxQ41paUM1d8";
     
     let supabaseClient;
+    const BUCKET_NAME = "poc-files";
+
     try {
       supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      addConsoleLog("Successfully connected to Supabase client SDK.", "success");
+      addConsoleLog("Successfully connected to Supabase Storage API.", "success");
     } catch(err) {
-      addConsoleLog("Failed to initialize Supabase client: " + err.message, "error");
+      addConsoleLog("Failed to initialize storage client: " + err.message, "error");
     }
 
     // Logger Console
@@ -697,7 +656,7 @@
       if (type === "success") classType = "class='log-success'";
       if (type === "error") classType = "class='log-error'";
 
-      line.innerHTML = `<span class="log-time">[${time}]</span> <span ${classType}>${text}</span>`;
+      line.innerHTML = `<span style="color: var(--text-muted);">[${time}]</span> <span ${classType}>${text}</span>`;
       consoleEl.appendChild(line);
       consoleEl.scrollTop = consoleEl.scrollHeight;
     }
@@ -732,7 +691,6 @@
           const link = document.createElement("a");
           
           let finalUrl = item.url;
-          // Format paths relative to this subdirectory
           if (finalUrl !== "index.html" && !finalUrl.startsWith("http") && !finalUrl.includes("markdown_renderer.html")) {
             if (finalUrl.startsWith("5_Symbols/")) {
               finalUrl = finalUrl.replace("5_Symbols/", "");
@@ -746,7 +704,7 @@
           }
           
           link.href = finalUrl;
-          link.className = `menu-link ${item.label === 'Table Ops' ? 'active' : ''}`;
+          link.className = `menu-link ${item.label === 'Storage' ? 'active' : ''}`;
           link.textContent = item.label;
           projectMenuContainer.appendChild(link);
         });
@@ -810,110 +768,108 @@
         setCookie("debug", "false");
       });
 
-      fetchTableData();
+      fetchFilesList();
     });
 
-    // Database Actions
-    async function fetchTableData() {
-      if (!supabaseClient) return;
-      addConsoleLog("Fetching current table content from standard REST API...");
+    // Storage Actions
+    function triggerFileInput() {
+      document.getElementById("fileInput").click();
+    }
+
+    async function uploadSelectedFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      addConsoleLog(`Initiating upload for object: "${file.name}" (${(file.size/1024).toFixed(1)} KB)...`);
       
+      // Sanitise filename to prevent path issues
+      const cleanName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+
       try {
-        const { data, error } = await supabaseClient
-          .from('tasks')
-          .select('*')
-          .order('id', { ascending: true });
+        const { data, error } = await supabaseClient.storage
+          .from(BUCKET_NAME)
+          .upload(cleanName, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
         if (error) throw error;
 
-        const tableContainer = document.getElementById("tableContainer");
-        tableContainer.innerHTML = "";
-        
-        let completed = 0;
-        let active = 0;
+        addConsoleLog(`Successfully uploaded file. Saved path: "${data.path}"`, "success");
+        fetchFilesList();
+      } catch (err) {
+        addConsoleLog("Upload failed: " + err.message, "error");
+      }
+    }
+
+    async function fetchFilesList() {
+      if (!supabaseClient) return;
+      addConsoleLog(`Scanning files list in bucket "${BUCKET_NAME}"...`);
+
+      try {
+        const { data, error } = await supabaseClient.storage
+          .from(BUCKET_NAME)
+          .list('', {
+            limit: 100,
+            offset: 0,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+
+        if (error) throw error;
+
+        const listContainer = document.getElementById("fileListContainer");
+        listContainer.innerHTML = "";
 
         if (data.length === 0) {
-          tableContainer.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Database table tasks is currently empty.</div>`;
-          addConsoleLog("Fetch complete. 0 tasks retrieved.", "success");
-        } else {
-          data.forEach(task => {
-            if (task.completed) completed++;
-            else active++;
-
-            const div = document.createElement("div");
-            div.className = "task-item";
-            div.innerHTML = `
-              <div class="task-title">${task.id}: ${task.title}</div>
-              <div class="task-badge ${task.completed ? 'badge-completed' : 'badge-pending'}">
-                ${task.completed ? 'Completed' : 'Pending'}
-              </div>
-            `;
-            tableContainer.appendChild(div);
-          });
-          addConsoleLog(`Fetch complete. Retrieved ${data.length} tasks successfully.`, "success");
-        }
-
-        document.getElementById("totalCount").textContent = data.length;
-        document.getElementById("completedCount").textContent = completed;
-        document.getElementById("activeCount").textContent = active;
-
-      } catch(err) {
-        addConsoleLog("Error fetching data: " + err.message, "error");
-      }
-    }
-
-    async function seedDatabase() {
-      if (!supabaseClient) return;
-      addConsoleLog("Initiating bulk seeding operation...");
-      
-      const mockTasks = [
-        { title: "Define Proof of Concept goals", completed: true },
-        { title: "Configure local system credentials", completed: true },
-        { title: "Run SQL migrations on Supabase", completed: true },
-        { title: "Test CRUD latency with REST pooler", completed: false },
-        { title: "Document Semblance error learnings", completed: false }
-      ];
-
-      try {
-        const { data, error } = await supabaseClient
-          .from('tasks')
-          .insert(mockTasks)
-          .select();
-
-        if (error) throw error;
-        addConsoleLog(`Seeding successful! Inserted ${data.length} mock rows.`, "success");
-        fetchTableData();
-      } catch(err) {
-        addConsoleLog("Seeding failed: " + err.message, "error");
-      }
-    }
-
-    async function wipeDatabase() {
-      if (!supabaseClient) return;
-      if (!confirm("Are you sure you want to delete all entries in the tasks table?")) return;
-      
-      addConsoleLog("Initiating truncate/deletion operations on tasks table...");
-      try {
-        // Fetch all rows to delete them since client API eq needs qualification
-        const { data: tasks, error: fetchErr } = await supabaseClient.from('tasks').select('id');
-        if (fetchErr) throw fetchErr;
-
-        if (tasks.length === 0) {
-          addConsoleLog("Table is already empty. No action taken.", "info");
+          listContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">Bucket is empty. Upload your first file.</div>`;
+          addConsoleLog("Scan complete. 0 files found.", "info");
           return;
         }
 
-        const ids = tasks.map(t => t.id);
-        const { error } = await supabaseClient
-          .from('tasks')
-          .delete()
-          .in('id', ids);
+        data.forEach(item => {
+          const publicUrl = supabaseClient.storage
+            .from(BUCKET_NAME)
+            .getPublicUrl(item.name).data.publicUrl;
+
+          const isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(item.name);
+          const fileCard = document.createElement("div");
+          fileCard.className = "file-card";
+          fileCard.innerHTML = `
+            <button class="file-delete-btn" onclick="deleteFile('${item.name}')" title="Delete File">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+            <div class="file-preview">
+              ${isImage ? `<img src="${publicUrl}" alt="${item.name}">` : `<i class="fa-regular fa-file-lines"></i>`}
+            </div>
+            <div class="file-name" title="${item.name}">${item.name}</div>
+            <a href="${publicUrl}" target="_blank" class="btn btn-secondary" style="padding: 0.35rem 0.5rem; font-size: 0.75rem; width: 100%; justify-content: center; gap: 0.25rem;">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link
+            </a>
+          `;
+          listContainer.appendChild(fileCard);
+        });
+
+        addConsoleLog(`Scan complete. Retrieved ${data.length} files successfully.`, "success");
+      } catch (err) {
+        addConsoleLog("Scan failed: " + err.message, "error");
+      }
+    }
+
+    async function deleteFile(fileName) {
+      if (!confirm(`Are you sure you want to delete file "${fileName}"?`)) return;
+
+      addConsoleLog(`Deleting file "${fileName}" from storage bucket...`);
+      try {
+        const { error } = await supabaseClient.storage
+          .from(BUCKET_NAME)
+          .remove([fileName]);
 
         if (error) throw error;
-        addConsoleLog(`Successfully deleted ${ids.length} rows from database.`, "success");
-        fetchTableData();
-      } catch(err) {
-        addConsoleLog("Wiping operation failed: " + err.message, "error");
+
+        addConsoleLog(`Successfully deleted file: "${fileName}"`, "success");
+        fetchFilesList();
+      } catch (err) {
+        addConsoleLog("Deletion failed: " + err.message, "error");
       }
     }
   </script>
