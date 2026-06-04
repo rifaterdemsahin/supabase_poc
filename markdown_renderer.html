@@ -497,7 +497,7 @@
             
             // Route relative URLs dynamically through the renderer
             let finalUrl = item.url;
-            if (finalUrl !== "index.html" && finalUrl !== "divider" && !finalUrl.startsWith("http")) {
+            if (finalUrl !== "index.html" && finalUrl !== "divider" && !finalUrl.startsWith("http") && !finalUrl.endsWith(".html")) {
               finalUrl = `markdown_renderer.html?file=${finalUrl}`;
             }
             

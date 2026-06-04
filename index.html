@@ -967,7 +967,7 @@
           
           // Route relative URLs (except Home index.html) through renderer if they are MD files or directories
           let finalUrl = item.url;
-          if (finalUrl !== "index.html" && !finalUrl.startsWith("http") && !finalUrl.includes("markdown_renderer.html")) {
+          if (finalUrl !== "index.html" && !finalUrl.startsWith("http") && !finalUrl.includes("markdown_renderer.html") && !finalUrl.endsWith(".html")) {
             finalUrl = `markdown_renderer.html?file=${finalUrl}`;
           }
           
@@ -1003,7 +1003,7 @@
             
             // Route relative URLs dynamically through the renderer
             let finalUrl = item.url;
-            if (finalUrl !== "index.html" && finalUrl !== "divider" && !finalUrl.startsWith("http")) {
+            if (finalUrl !== "index.html" && finalUrl !== "divider" && !finalUrl.startsWith("http") && !finalUrl.endsWith(".html")) {
               finalUrl = `markdown_renderer.html?file=${finalUrl}`;
             }
             

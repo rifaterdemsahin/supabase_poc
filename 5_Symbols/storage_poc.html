@@ -732,7 +732,15 @@
             let finalUrl = item.url;
             
             if (finalUrl !== "index.html" && finalUrl !== "divider" && !finalUrl.startsWith("http")) {
-              finalUrl = `../markdown_renderer.html?file=${finalUrl}`;
+              if (finalUrl.endsWith(".html")) {
+                if (finalUrl.startsWith("5_Symbols/")) {
+                  finalUrl = finalUrl.replace("5_Symbols/", "");
+                } else {
+                  finalUrl = "../" + finalUrl;
+                }
+              } else {
+                finalUrl = `../markdown_renderer.html?file=${finalUrl}`;
+              }
             } else if (finalUrl === "index.html") {
               finalUrl = "../index.html";
             }
