@@ -330,16 +330,49 @@ This log documents the thinking phase summaries and reasoning processes of the L
 - Created `4_Formula/dsl.md` containing glossary definitions.
 - Staged, committed, and pushed changes.
 
+## 📅 2026-06-04 — Supabase Integration and Template Refactoring
 
+### 📥 Input / Task
+- Save the Supabase access token in Azure Key Vault `dp-kv-deliverypilot`.
+- Initialize/refactor project using template from `rifaterdemsahin/delivery-pilot-template`.
+- Replace codes, fix all broken absolute/relative links.
+- Create a sample app saving data to Supabase database.
+- Commit and push changes.
 
+### 💭 Thinking & Reasoning Process
+1. **Credentials Management**: Checked Azure CLI login. Saved Supabase access token under secret name `supabase-access-token` in `dp-kv-deliverypilot` Key Vault.
+2. **Template Refactoring**: Cloned the template repository, copied all directories/files recursively to the project directory, and resolved all broken local absolute path strings pointing to `delivery-pilot-template`, replacing them with `supabase_poc`.
+3. **Database Configuration**: Created a new Supabase project `supabase-poc-app` under the organization `xryfkwlofgwxwezywwww` using the Supabase Management API. Obtained the anonymous and service role API keys and saved them in the Azure Key Vault.
+4. **Database Provisioning**: Initially faced a connection timeout on Postgres ports 5432/6543 for `db.vlhzvprprqiljuaresnb.supabase.co`. Queried the Supabase Management API for pooler configuration and discovered the pooler host is `aws-1-eu-west-2.pooler.supabase.com`. Wrote and executed a Python script using the `pg8000` library to connect to the pooler, create the `tasks` table, enable Row Level Security, and insert initial sample rows.
+5. **Sample App Integration**: Refactored `index.html` to integrate a modern, beautiful, and interactive frontend client connecting directly to the Supabase database using the Supabase JS library. Allowed real-time task fetching, task checking/unchecking, adding new tasks, and deleting tasks.
+6. **Logging & Reflection**: Documented thinking log, errors, fixes, prompts, and retrospect in corresponding files.
 
+### 📤 Outcomes & Decisions
+- Saved all credentials to Azure Key Vault.
+- Fully synchronized project layout with the `delivery-pilot-template`.
+- Created and populated the `tasks` database table.
+- Added live Supabase interactive app to the main dashboard.
+- Composed thinking, error, fix, and prompts log.
 
+---
 
+## 📅 2026-06-04 — Supabase Table Operations Page and Menu Integration
 
+### 📥 Input / Task
+- Create a dedicated admin page in Symbols stage directory for advanced database/table operations.
+- Update central and fallback navigation configurations to include links to the new Table Operations feature.
+- Commit and push changes.
 
+### 💭 Thinking & Reasoning Process
+1. **Navigation Management**: Updated the centralized JSON navigation config `navigation_config.json` and fallback definitions in `index.html` and `markdown_renderer.html` to expose "Table Ops" in the main Project Menu and "Table Operations" in the Debug Menu. Correctly formatted paths relative to subdirectory levels.
+2. **UI Design**: Created a dedicated database dashboard `/Users/rifaterdemsahin/projects/supabase_poc/5_Symbols/table_operations.html` following the responsive dark mode glassmorphic aesthetic. Included:
+   - Stats indicators for completed, active, and total tasks.
+   - Database operations (Seed mock tasks, Wipe database tasks).
+   - Live query status terminal log showing standard output queries.
+   - Two-menu layout integration (standard Project navigation + Sidebar overlay debug toggle).
+3. **Verification**: Checked path variables and re-tested Supabase SDK connections.
 
-
-
-
-
-
+### 📤 Outcomes & Decisions
+- Created `5_Symbols/table_operations.html`.
+- Updated navigation configurations and fallback variables.
+- Verified live seeder and truncater client capabilities.
